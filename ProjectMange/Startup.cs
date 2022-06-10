@@ -21,7 +21,6 @@ namespace ProjectMange
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            
             services.AddControllers();
             /*配置JWT认证中心*/
             //读取一波配置文件
