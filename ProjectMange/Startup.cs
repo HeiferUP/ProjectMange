@@ -1,5 +1,6 @@
 ﻿using Autofac;
 using Autofac.Extras.DynamicProxy;
+using FreeSql;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.IdentityModel.Tokens;
@@ -16,6 +17,10 @@ namespace ProjectMange
             Configuration = configuration;
         }
 
+        /// <summary>
+        /// FreeSql实例
+        /// </summary>
+        public static IFreeSql Fsql { get; private set; }
         public IConfiguration Configuration { get; }
 
         // This method gets called by the runtime. Use this method to add services to the container.
@@ -104,6 +109,10 @@ namespace ProjectMange
                     //接口拦截
                     .EnableInterfaceInterceptors()
                     .InterceptedBy(interceptorServiceTypes.ToArray());
+
+                //注入仓储
+                foreach (var repo in assemblyServices.GetTypes().Where(a => a.IsAbstract == false && typeof(IBaseRepository).IsAssignableFrom(a)))
+                    builder.RegisterType(repo);
             }
             catch (Exception ex)
             {
@@ -135,6 +144,25 @@ namespace ProjectMange
             app.UseSwagger();
             app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "test v1"));
 
+        }
+
+        private void ConfigureFsql(IServiceCollection services)
+        {
+            //FreeSql配置
+            Fsql = new FreeSql.FreeSqlBuilder()
+               .UseConnectionString(FreeSql.DataType.SqlServer, Configuration.GetConnectionString("DefaultConnection"))
+               .UseAutoSyncStructure(false)  //TODO 自动迁移表结构,请关闭
+               .UseLazyLoading(false)
+#if(DEBUG)
+               .UseMonitorCommand(null, (cmd, log) => Console.WriteLine(cmd.CommandText + log))
+#endif
+               .Build();
+
+
+            //注入FreeSql
+            services.AddSingleton<IFreeSql>(Fsql);
+            services.AddScoped<UnitOfWorkManager>();
+            services.AddFreeRepository(null, typeof(Startup).Assembly);
         }
     }
 }
