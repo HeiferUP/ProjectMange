@@ -11,7 +11,7 @@ namespace ProjectMange
 
         public static IHostBuilder CreateHostBuilder(string[] args) =>
             Host.CreateDefaultBuilder(args)
-            //Ìæ»»IOCÈÝÆ÷
+            //Ìæ»»Ô­ÉúIOCÈÝÆ÷
                 .UseServiceProviderFactory(new AutofacServiceProviderFactory())
                 .ConfigureWebHostDefaults(webBuilder =>
                 {

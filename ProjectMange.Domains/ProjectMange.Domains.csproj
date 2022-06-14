@@ -1,9 +1,14 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>net6.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
   </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="FreeSql.Provider.SqlServer" Version="3.2.662" />
+    <PackageReference Include="LDFCore.Platform" Version="0.6.19" />
+  </ItemGroup>
 
 </Project>

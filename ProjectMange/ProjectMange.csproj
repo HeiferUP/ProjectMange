@@ -11,8 +11,10 @@
   <ItemGroup>
     <PackageReference Include="Autofac.Extensions.DependencyInjection" Version="8.0.0" />
     <PackageReference Include="Autofac.Extras.DynamicProxy" Version="6.0.1" />
+    <PackageReference Include="AutoMapper" Version="11.0.1" />
     <PackageReference Include="FreeSql.Provider.SqlServer" Version="3.2.662" />
     <PackageReference Include="FreeSql.Repository" Version="3.2.662" />
+    <PackageReference Include="LDFCore.Platform" Version="0.6.19" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="6.0.5" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.2.3" />
   </ItemGroup>

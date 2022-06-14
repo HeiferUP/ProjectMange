@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
+using ProjectMange.Infrastructure.AutoMapper;
 using System.Reflection;
 using System.Text;
 
@@ -26,6 +27,8 @@ namespace ProjectMange
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            //FreeSql配置
+            ConfigureFsql(services);
             services.AddControllers();
             /*配置JWT认证中心*/
             //读取一波配置文件
@@ -163,6 +166,8 @@ namespace ProjectMange
             services.AddSingleton<IFreeSql>(Fsql);
             services.AddScoped<UnitOfWorkManager>();
             services.AddFreeRepository(null, typeof(Startup).Assembly);
+            //AutoMapper配置
+            services.AddMappers(Configuration.GetSection("Assembly:Mapper").Value);
         }
     }
 }
