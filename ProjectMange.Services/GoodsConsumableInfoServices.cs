@@ -20,8 +20,9 @@ namespace ProjectMange.Services
     ///</summary>
     public class GoodsConsumableInfoServices : IGoodsConsumableInfoServices
     {
-
+        //AutoMapper，用于值映射
         private readonly IMapper _mapper;
+        //注入某个表的仓储
         private readonly IBaseRepository<GoodsConsumableInfo, int> _goodsConsumableInfoRepo;
         /// <summary>
         /// INIT

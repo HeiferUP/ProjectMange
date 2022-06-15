@@ -1,4 +1,6 @@
-﻿using System;
+﻿using LDFCore.Platform.Result;
+using ProjectMange.Services.Dtos;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,6 +10,6 @@ namespace ProjectMange.Services
 {
     public interface IAccountServices
     {
-        Task<string> Login(string username, string password);
+        Task<IResultModel<LoginUserOutput>> Login(string username, string password);
     }
 }

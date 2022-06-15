@@ -1,5 +1,10 @@
-﻿using Microsoft.Extensions.Configuration;
+﻿using FreeSql;
+using FreeSql.Internal;
+using LDFCore.Platform.Result;
+using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
+using ProjectMange.Domains.Entity;
+using ProjectMange.Services.Dtos;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
@@ -9,9 +14,11 @@ namespace ProjectMange.Services
     public class AccountServices : IAccountServices
     {
         public IConfiguration _configuration;
-        public AccountServices(IConfiguration configuration)
+        private readonly IBaseRepository<UserInfo, int> _userInfoRepo;
+        public AccountServices(IConfiguration configuration, IBaseRepository<UserInfo, int> userInfoRepo)
         {
             _configuration = configuration;
+            _userInfoRepo = userInfoRepo;
         }
         /// <summary>
         /// 登录
@@ -20,7 +27,7 @@ namespace ProjectMange.Services
         /// <param name="password"></param>
         /// <returns></returns>
         /// <exception cref="NotImplementedException"></exception>
-        public async Task<string> Login(string username, string password)
+        public async Task<IResultModel<LoginUserOutput>> Login(string username, string password)
         {
             var result =await GetToken(username,password);
             return result;
@@ -32,10 +39,12 @@ namespace ProjectMange.Services
         /// <param name="userName"></param>
         /// <param name="passWord"></param>
         /// <returns></returns>
-        private async Task<string> GetToken(string userName, string passWord)
+        private async Task<IResultModel<LoginUserOutput>> GetToken(string userName, string passWord)
         {
+            passWord=LDFCore.Platform.Utils.Encrypt.Md5By32(passWord);
+            var user = await _userInfoRepo.Where(x => x.UserId == userName && x.PassWord == passWord).FirstAsync();
             //做一个简单的获取Token
-            if (!string.IsNullOrEmpty(userName) && !string.IsNullOrEmpty(passWord))
+            if (user!=null)
             {
                 Claim[] claims = new[]
                 {
@@ -59,11 +68,20 @@ namespace ProjectMange.Services
                     expires: DateTime.Now.AddMinutes(20),//配置20分钟有效期
                     signingCredentials: creds);//配置秘钥信息
                 var token = new JwtSecurityTokenHandler().WriteToken(getToken);
-                return token ;
+                var resut = new LoginUserOutput
+                {
+                    AddTime = user.AddTime,
+                    DelFlag = user.DelFlag,
+                    Sex = user.Sex,
+                    Token = token,
+                    UserName = userName,
+                };
+
+                return ResultModel.Success(resut) ;
             }
             else
             {
-                return null;
+                return ResultModel.Success(new LoginUserOutput());
             }
         }
     }

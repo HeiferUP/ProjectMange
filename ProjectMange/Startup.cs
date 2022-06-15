@@ -167,6 +167,7 @@ namespace ProjectMange
             services.AddScoped<UnitOfWorkManager>();
             services.AddFreeRepository(null, typeof(Startup).Assembly);
             //AutoMapper配置
+            //方法实现查看ProjectMange.Infrastructure>>ServiceCollectionExtensions
             services.AddMappers(Configuration.GetSection("Assembly:Mapper").Value);
         }
     }

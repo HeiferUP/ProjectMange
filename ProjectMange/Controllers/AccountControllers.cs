@@ -1,7 +1,9 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using LDFCore.Platform.Result;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using ProjectMange.Services;
+using ProjectMange.Services.Dtos;
 
 namespace ProjectMange.Controllers
 {
@@ -22,7 +24,7 @@ namespace ProjectMange.Controllers
         /// <param name="password"></param>
         /// <returns></returns>
         [HttpPost]
-        public async Task<string> Login(string name,string password)
+        public async Task<IResultModel<LoginUserOutput>> Login(string name,string password)
         {
             var result=await _accountServices.Login(name,password);
             return result;
