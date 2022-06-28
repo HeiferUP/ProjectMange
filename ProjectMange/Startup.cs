@@ -147,6 +147,7 @@ namespace ProjectMange
             //启用Swagger中间件
             app.UseSwagger();
             app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "test v1"));
+            UseFsql(app);
         }
 
         private void ConfigureFsql(IServiceCollection services)
@@ -175,6 +176,7 @@ namespace ProjectMange
         /// <param name="app"></param>
         private void UseFsql(IApplicationBuilder app)
         {
+            //配置添加数据时自动往字段赋值
             Fsql.Aop.AuditValue += (s, e) =>
             {
                 if(e.AuditValueType==FreeSql.Aop.AuditValueType.Insert && e.Property.Name == "AddTime")
