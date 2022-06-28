@@ -107,6 +107,7 @@ namespace ProjectMange.Services
             var verify =await VerifyAddUsaer(input);
             if (!verify.Successful) return verify;
             var data = _mapper.Map<UserInfo>(input);
+            data.PassWord = LDFCore.Platform.Utils.Encrypt.Md5By32(data.PassWord);
             await _userInfoRepo.InsertAsync(data);
             return ResultModel.Success();
         }

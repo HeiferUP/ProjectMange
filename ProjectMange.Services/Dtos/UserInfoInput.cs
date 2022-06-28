@@ -28,7 +28,6 @@ namespace ProjectMange.Services.Dtos
         /// 
         /// </summary>
         public string PassWord { get; set; }
-
         /// <summary>
         /// 
         /// </summary>

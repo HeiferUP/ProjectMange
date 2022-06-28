@@ -131,7 +131,7 @@ namespace ProjectMange
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
-            }
+            } 
 
             app.UseHttpsRedirection();
 
