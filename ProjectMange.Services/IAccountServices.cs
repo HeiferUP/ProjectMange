@@ -10,6 +10,6 @@ namespace ProjectMange.Services
 {
     public interface IAccountServices
     {
-        Task<IResultModel<LoginUserOutput>> Login(string username, string password);
+        Task<IResultModel> Login(string username, string password);
     }
 }

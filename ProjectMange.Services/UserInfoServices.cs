@@ -12,6 +12,7 @@ using System.Threading.Tasks;
 using ProjectMange.Services.Query;
 using ProjectMange.Services.Dtos;
 using ProjectMange.Domains.Entity;
+using Microsoft.Extensions.Caching.Memory;
 
 namespace ProjectMange.Services
 {
@@ -23,13 +24,15 @@ namespace ProjectMange.Services
 
         private readonly IMapper _mapper;
         private readonly IBaseRepository<UserInfo, int> _userInfoRepo;
+        private readonly IMemoryCache _memoryCache;
         /// <summary>
         /// INIT
         /// </summary>
-        public UserInfoServices(IMapper mapper, IBaseRepository<UserInfo, int> userInfoRepo)
+        public UserInfoServices(IMapper mapper, IBaseRepository<UserInfo, int> userInfoRepo, IMemoryCache memoryCache)
         {
             _mapper = mapper;
             _userInfoRepo = userInfoRepo;
+            _memoryCache = memoryCache;
         }
 
         /// <summary>
@@ -57,6 +60,7 @@ namespace ProjectMange.Services
         /// <returns></returns>
         public async Task<IResultModel<UserInfoOutput>> DetailAsync(int id)
         {
+            var cache = _memoryCache.Get("UserName");
             var data = await _userInfoRepo.Select.Where(a => a.Id == id).FirstAsync<UserInfoOutput>();
             return ResultModel.Success(data);
         }

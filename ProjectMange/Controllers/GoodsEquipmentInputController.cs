@@ -14,6 +14,7 @@ namespace ProjectMange.Controllers
     /// <summary>
     /// Common服务接口
     ///</summary>
+    [Authorize]
     [Route("api/[controller]/[action]")]
     public class GoodsEquipmentInputController
     {

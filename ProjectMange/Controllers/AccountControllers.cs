@@ -24,10 +24,9 @@ namespace ProjectMange.Controllers
         /// <param name="password"></param>
         /// <returns></returns>
         [HttpPost]
-        public async Task<IResultModel<LoginUserOutput>> Login(string name,string password)
+        public async Task<IResultModel> Login(string name,string password)
         {
-            var result=await _accountServices.Login(name,password);
-            return result;
+           return await _accountServices.Login(name,password);
         }
     }
 }

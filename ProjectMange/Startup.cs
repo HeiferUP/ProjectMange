@@ -146,7 +146,6 @@ namespace ProjectMange
             //启用Swagger中间件
             app.UseSwagger();
             app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "test v1"));
-
         }
 
         private void ConfigureFsql(IServiceCollection services)
@@ -169,6 +168,7 @@ namespace ProjectMange
             //AutoMapper配置
             //方法实现查看ProjectMange.Infrastructure>>ServiceCollectionExtensions
             services.AddMappers(Configuration.GetSection("Assembly:Mapper").Value);
+            services.AddMemoryCache();
         }
     }
 }

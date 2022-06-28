@@ -1,6 +1,7 @@
 ﻿using FreeSql;
 using FreeSql.Internal;
 using LDFCore.Platform.Result;
+using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using ProjectMange.Domains.Entity;
@@ -15,10 +16,12 @@ namespace ProjectMange.Services
     {
         public IConfiguration _configuration;
         private readonly IBaseRepository<UserInfo, int> _userInfoRepo;
-        public AccountServices(IConfiguration configuration, IBaseRepository<UserInfo, int> userInfoRepo)
+        private readonly IMemoryCache _memoryCache;
+        public AccountServices(IConfiguration configuration, IBaseRepository<UserInfo, int> userInfoRepo, IMemoryCache memoryCache)
         {
             _configuration = configuration;
             _userInfoRepo = userInfoRepo;
+            _memoryCache = memoryCache;
         }
         /// <summary>
         /// 登录
@@ -27,10 +30,10 @@ namespace ProjectMange.Services
         /// <param name="password"></param>
         /// <returns></returns>
         /// <exception cref="NotImplementedException"></exception>
-        public async Task<IResultModel<LoginUserOutput>> Login(string username, string password)
+        public async Task<IResultModel> Login(string username, string password)
         {
-            var result =await GetToken(username,password);
-            return result;
+            return await GetToken(username,password);
+            
         }
 
         /// <summary>
@@ -39,7 +42,7 @@ namespace ProjectMange.Services
         /// <param name="userName"></param>
         /// <param name="passWord"></param>
         /// <returns></returns>
-        private async Task<IResultModel<LoginUserOutput>> GetToken(string userName, string passWord)
+        private async Task<IResultModel> GetToken(string userName, string passWord)
         {
             passWord=LDFCore.Platform.Utils.Encrypt.Md5By32(passWord);
             var user = await _userInfoRepo.Where(x => x.UserId == userName && x.PassWord == passWord).FirstAsync();
@@ -77,11 +80,16 @@ namespace ProjectMange.Services
                     UserName = userName,
                 };
 
+                //缓存一些用户信息
+                _memoryCache.Set("UserName", user.UserName);
+                _memoryCache.Set("UserId", user.UserId);
+                _memoryCache.Set("DepartmentId", user.DepartmentId);
+
                 return ResultModel.Success(resut) ;
             }
             else
             {
-                return ResultModel.Success(new LoginUserOutput());
+                return ResultModel.Failed("账号或密码错误，请重试");
             }
         }
     }

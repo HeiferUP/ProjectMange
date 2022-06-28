@@ -15,6 +15,7 @@ namespace ProjectMange.Controllers
     /// Common服务接口
     ///</summary>
     [Route("api/[controller]/[action]")]
+    [Authorize]
     public class PowerInfoController
     {
 
