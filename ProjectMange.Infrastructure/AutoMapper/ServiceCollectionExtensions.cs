@@ -14,6 +14,12 @@ namespace ProjectMange.Infrastructure.AutoMapper
     /// </summary>
     public static class ServiceCollectionExtensions
     {
+        /// <summary>
+        /// 添加关系映射
+        /// </summary>
+        /// <param name="services"></param>
+        /// <param name="assemblies"></param>
+        /// <returns></returns>
         public static IServiceCollection AddMappers(this IServiceCollection services, string assemblies)
         {
             MapperConfiguration mapperConfiguration = new MapperConfiguration(delegate (IMapperConfigurationExpression cfg)

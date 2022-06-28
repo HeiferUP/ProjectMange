@@ -13,20 +13,6 @@ namespace ProjectMange.Services.Dtos
         /// </summary>
         public int Id { get; set; }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        public DateTime AddTime { get; set; }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        public byte DelFlag { get; set; }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        public DateTime? DelTime { get; set; }
 
         /// <summary>
         /// 

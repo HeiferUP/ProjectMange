@@ -28,5 +28,16 @@ namespace ProjectMange.Controllers
         {
            return await _accountServices.Login(name,password);
         }
+
+        /// <summary>
+        /// 用户注册
+        /// </summary>
+        /// <param name="input"></param>
+        /// <returns></returns>
+        [HttpPost]
+        public async Task<IResultModel> RegisterUser(UserInfoInput input)
+        {
+            return await _accountServices.RegisterUser(input);
+        }
     }
 }

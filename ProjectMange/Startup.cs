@@ -92,7 +92,8 @@ namespace ProjectMange
                 //启动Swagger注释
                 c.IncludeXmlComments(xmlPath, true);
             });
-            
+            //方法实现查看ProjectMange.Infrastructure>>ServiceCollectionExtensions
+            services.AddMappers(Configuration.GetSection("Assembly:Mapper").Value);
         }
 
         /// <summary>
@@ -166,9 +167,27 @@ namespace ProjectMange
             services.AddScoped<UnitOfWorkManager>();
             services.AddFreeRepository(null, typeof(Startup).Assembly);
             //AutoMapper配置
-            //方法实现查看ProjectMange.Infrastructure>>ServiceCollectionExtensions
-            services.AddMappers(Configuration.GetSection("Assembly:Mapper").Value);
             services.AddMemoryCache();
         }
+        /// <summary>
+        /// Freesql配置
+        /// </summary>
+        /// <param name="app"></param>
+        private void UseFsql(IApplicationBuilder app)
+        {
+            Fsql.Aop.AuditValue += (s, e) =>
+            {
+                if(e.AuditValueType==FreeSql.Aop.AuditValueType.Insert && e.Property.Name == "AddTime")
+                {
+                    e.Value = DateTime.Now;
+                }
+                if (e.AuditValueType == FreeSql.Aop.AuditValueType.Insert && e.Property.Name == "DelFlag")
+                {
+                    e.Value = 0;
+                }
+            };     
+        }
+
+
     }
 }

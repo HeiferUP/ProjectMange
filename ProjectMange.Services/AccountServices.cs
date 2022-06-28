@@ -1,4 +1,5 @@
-﻿using FreeSql;
+﻿using AutoMapper;
+using FreeSql;
 using FreeSql.Internal;
 using LDFCore.Platform.Result;
 using Microsoft.Extensions.Caching.Memory;
@@ -17,11 +18,13 @@ namespace ProjectMange.Services
         public IConfiguration _configuration;
         private readonly IBaseRepository<UserInfo, int> _userInfoRepo;
         private readonly IMemoryCache _memoryCache;
-        public AccountServices(IConfiguration configuration, IBaseRepository<UserInfo, int> userInfoRepo, IMemoryCache memoryCache)
+        private readonly IMapper _mapper;
+        public AccountServices(IConfiguration configuration, IBaseRepository<UserInfo, int> userInfoRepo, IMemoryCache memoryCache, IMapper mapper)
         {
             _configuration = configuration;
             _userInfoRepo = userInfoRepo;
             _memoryCache = memoryCache;
+            _mapper = mapper;
         }
         /// <summary>
         /// 登录
@@ -91,6 +94,48 @@ namespace ProjectMange.Services
             {
                 return ResultModel.Failed("账号或密码错误，请重试");
             }
+        }
+
+        /// <summary>
+        /// 注册
+        /// </summary>
+        /// <param name="input"></param>
+        /// <returns></returns>
+        /// <exception cref="NotImplementedException"></exception>
+        public async Task<IResultModel> RegisterUser(UserInfoInput input)
+        {
+            var verify =await VerifyAddUsaer(input);
+            if (!verify.Successful) return verify;
+            var data = _mapper.Map<UserInfo>(input);
+            await _userInfoRepo.InsertAsync(data);
+            return ResultModel.Success();
+        }
+
+        private async Task<IResultModel> VerifyAddUsaer(UserInfoInput input,bool IsAdd=true)
+        {
+            if (IsAdd)
+            {
+                if (await _userInfoRepo.Where(x => x.UserId == input.UserId).AnyAsync())
+                {
+                    return ResultModel.Failed("用户已存在");
+                }
+                if (await _userInfoRepo.Where(x => x.UserName == input.UserName).AnyAsync())
+                {
+                    return ResultModel.Failed("用户名已存在");
+                }
+                if (await _userInfoRepo.Where(x => x.Email == input.Email).AnyAsync())
+                {
+                    return ResultModel.Failed("邮箱已存在");
+                }
+            }
+            else
+            {
+                if(await _userInfoRepo.Where(x => x.UserId == input.UserId).AnyAsync())
+                {
+                    return ResultModel.Failed("用户已存在");
+                }
+            }
+            return ResultModel.Success();
         }
     }
 }
