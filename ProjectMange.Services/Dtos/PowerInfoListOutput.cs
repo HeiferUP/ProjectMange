@@ -74,7 +74,7 @@ namespace ProjectMange.Services.Dtos
     {
           #region string扩展
         /// <summary>
-        /// 
+        /// 树形菜单拓展
         /// </summary>
         /// <param name="list"></param>
         /// <returns></returns>
@@ -89,6 +89,13 @@ namespace ProjectMange.Services.Dtos
             }
             return trees;
         }
+
+        /// <summary>
+        /// 递归拓展
+        /// </summary>
+        /// <param name="data"></param>
+        /// <param name="item"></param>
+        /// <returns></returns>
 
         private static PowerInfoListOutput GetChildrenTree(List<PowerInfoListOutput> data, PowerInfoListOutput item)
         {
