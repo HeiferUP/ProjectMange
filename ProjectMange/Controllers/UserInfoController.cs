@@ -81,6 +81,18 @@ namespace ProjectMange.Controllers
             return await _userInfoServices.RemoveAsync(parms);
         }
 
+        /// <summary>
+        /// 角色禁用/启用
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        [HttpPost]
+
+        public async Task<IResultModel> UpdateUserDelFlag(UserInfoInput model)
+        {
+            return await _userInfoServices.UpdateUserDelFlagAsync(model);
+        }
+
     }
 }
 

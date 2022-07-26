@@ -45,6 +45,13 @@ namespace ProjectMange.Services
         /// <returns></returns>
         Task<IResultModel> RemoveAsync(RemoveModel<int> parms);
 
+        /// <summary>
+        /// 角色启用/禁用
+        /// </summary>
+        /// <param name="input"></param>
+        /// <returns></returns>
+        Task<IResultModel> UpdateUserDelFlagAsync(UserInfoInput input);
+
     }
 }
 

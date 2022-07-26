@@ -106,5 +106,27 @@ namespace ProjectMange.Services
             await _userInfoRepo.DeleteAsync(parms.Id);
             return ResultModel.Success();
         }
+
+        /// <summary>
+        /// 角色启用/禁用
+        /// </summary>
+        /// <param name="input"></param>
+        /// <returns></returns>
+
+        public async Task<IResultModel> UpdateUserDelFlagAsync(UserInfoInput input)
+        {
+            var data = await _userInfoRepo.FindAsync(input.Id);
+            if (data==null) return ResultModel.Failed("角色信息不存在");
+            if (data.DelFlag == 0)
+            {
+                data.DelFlag = 1;
+            }
+            else
+            {
+                data.DelFlag = 0;
+            }
+            return ResultModel.Success();
+
+        }
     }
 }

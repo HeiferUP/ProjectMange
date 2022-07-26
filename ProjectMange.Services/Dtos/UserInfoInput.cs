@@ -48,6 +48,11 @@ namespace ProjectMange.Services.Dtos
         /// </summary>
         public string UserName { get; set; }
 
+        /// <summary>
+        /// 角色状态
+        /// </summary>
+        public byte DelFlag { get; set; }
+
     }
 }
 
