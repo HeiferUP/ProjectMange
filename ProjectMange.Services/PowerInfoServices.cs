@@ -43,10 +43,10 @@ namespace ProjectMange.Services
                 //TODO 这里补充筛选条件
                 .Count(out var count)
                 .OrderBy(a => a.Id)
-                .Page(parms.Page, parms.PageSize)
                 .ToListAsync<PowerInfoListOutput>();
 
             parms.TotalCount = count;
+            list = list.ToTreeList();
             return PageResult.PageList(list, parms);
         }
 
@@ -102,5 +102,7 @@ namespace ProjectMange.Services
             await _powerInfoRepo.DeleteAsync(parms.Id);
             return ResultModel.Success();
         }
+
+
     }
 }

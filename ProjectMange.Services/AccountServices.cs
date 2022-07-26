@@ -87,8 +87,12 @@ namespace ProjectMange.Services
                 _memoryCache.Set("UserName", user.UserName);
                 _memoryCache.Set("UserId", user.UserId);
                 _memoryCache.Set("DepartmentId", user.DepartmentId);
-
                 return ResultModel.Success(resut) ;
+            }
+            else if (user.DelFlag.Equals(1))
+            {
+                return ResultModel.Failed("账号已被禁用，请重试");
+
             }
             else
             {

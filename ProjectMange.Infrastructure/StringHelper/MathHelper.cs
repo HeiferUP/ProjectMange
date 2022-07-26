@@ -1,4 +1,5 @@
-﻿using System;
+﻿
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -18,5 +19,8 @@ namespace ProjectMange.Infrastructure.StringHelper
         {
             return Math.Round(value ?? 0, num);
         }
+
+
+        
     }
 }
